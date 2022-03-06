@@ -1,15 +1,21 @@
+from math import sqrt
 import numpy as np
 from rocket import Rocket
 
 class Engine:
-    def __init__(self, exhaustVel: float, fuelMass: float, fuelUsage: float) -> None:
-        self.exhaustVel: float = exhaustVel
+    def __init__(self, fuelMass: float, fuelUsage: float, fuelEnergy: float, efficiency: float) -> None:
         self.fuelMass: float = fuelMass
         self.fuelUsage: float = fuelUsage
 
+        self.fuelEnergy = fuelEnergy
+        self.efficiency = efficiency
+
     def applyForce(self, rkt: Rocket):
         if self.fuelMass > 0:
-            rkt.applyForce(np.array((0, self.exhaustVel * self.fuelUsage)))
+            force = np.array((0, sqrt(2* self.fuelEnergy * self.efficiency) * self.fuelUsage))
+            # print(force)
+            rkt.applyForce(force)
+            # print(rkt.acc)
 
     def useFuel(self, dt: float):
         if self.fuelMass > 0:

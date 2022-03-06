@@ -9,15 +9,15 @@ from atmosphere import Atmosphere
 def main():
     atm = Atmosphere()
     
-    ad = AirDrag(1.225, np.pi, 0.45)
+    ad = AirDrag(np.pi, 0.45)
     
-    eng = Engine(300, 80, 10)
+    eng = Engine(90, 10, 100000, 0.7)
 
     rkt = Rocket(
         np.array((0, 0.1)), 
         np.zeros(2),
         np.zeros(2),
-        20
+        10
     )
 
     data = {
@@ -46,7 +46,7 @@ def main():
         g = atm.getGravity(rkt)
 
         eng.applyForce(rkt)
-        ad.applyDrag(rkt)
+        ad.applyDrag(rkt, atm)
 
         eng.useFuel(dt)
         rkt.setTotalMass(eng.fuelMass)
@@ -80,6 +80,8 @@ def main():
     plt.plot(data['time'], data['vel']['y'])
     plt.plot(data['time'], data['acc']['y'])
     plt.plot(data['time'], data['mass'])
+
+    plt.legend(["pos.x", "vel.y", "acc.y", "mass"])
     plt.show()
 
 if __name__ == "__main__" :
